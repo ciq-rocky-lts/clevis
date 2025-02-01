@@ -1,0 +1,16 @@
+Workaround for FIPS and heavy-entropy requirement systems:  run pwmake 100 times to prevent it failing due to low entropy
+
+diff --git a/src/luks/clevis-luks-common-functions b/src/luks/clevis-luks-common-functions
+index a463781..da305d3 100644
+--- a/src/luks/clevis-luks-common-functions
++++ b/src/luks/clevis-luks-common-functions
+@@ -880,7 +880,8 @@ clevis_luks_generate_key() {
+     if [ "${bits}" -gt "${MAX_ENTROPY_BITS}" ]; then
+         bits="${MAX_ENTROPY_BITS}"
+     fi
+-    pwmake "${bits}"
++    # Try pwmake several times to ensure proper entropy is achieved:
++    for((i=0;i<100;i++));do if pwmake "${bits}" 2>/dev/null; then break; fi;  done
+ }
+ 
+ # clevis_luks_token_id_by_slot() returns the token ID linked to a

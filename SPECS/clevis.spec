@@ -1,62 +1,63 @@
 %global _hardened_build 1
 
-Name:           clevis
-Version:        15
-Release:        14%{?dist}
-Summary:        Automated decryption framework
+Name:                 clevis
+Version:              15
+Release:              14%{?dist}.0.1
+Summary:              Automated decryption framework
 
-License:        GPLv3+
-URL:            https://github.com/latchset/%{name}
-Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+License:              GPLv3+
+URL:                  https://github.com/latchset/%{name}
+Source0:              https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 
-Patch0001: 0001-Fixes-for-dealing-with-newer-tang-without-tangd-upda.patch
-Patch0002: 0002-Add-the-option-to-extract-luks-passphrase-used-for-b.patch
-Patch0003: 0003-systemd-account-for-unlocking-failures-in-clevis-luk.patch
-Patch0004: 0004-systemd-drop-ncat-dependency.patch
-Patch0005: 0005-Stop-sending-stderr-to-the-void-when-decryption-does.patch
-Patch0006: 0006-luks-enable-debugging-in-clevis-scripts-when-rd.debu.patch
-Patch0007: 0007-luks-explicitly-specify-pbkdf-iterations-to-cryptset.patch
-Patch0008: 0008-tang-dump-url-on-error-communication.patch
-Patch0009: 0009-feat-rename-the-test-pin-to-null-pin.patch
-Patch0010: 0010-avoid-clevis-invalid-msg.patch
-Patch0011: 0011-Improve-boot-performance-by-removing-key-check.patch
-Patch0012: 0012-ignore-empty-and-comment-lines-in-crypttab.patch
-Patch0013: 0013-luks-define-max-entropy-bits-for-pwmake.patch
-Patch0014: 0014-luks-edit-remove-unnecessary-redirection.patch
+Patch0001:            0001-Fixes-for-dealing-with-newer-tang-without-tangd-upda.patch
+Patch0002:            0002-Add-the-option-to-extract-luks-passphrase-used-for-b.patch
+Patch0003:            0003-systemd-account-for-unlocking-failures-in-clevis-luk.patch
+Patch0004:            0004-systemd-drop-ncat-dependency.patch
+Patch0005:            0005-Stop-sending-stderr-to-the-void-when-decryption-does.patch
+Patch0006:            0006-luks-enable-debugging-in-clevis-scripts-when-rd.debu.patch
+Patch0007:            0007-luks-explicitly-specify-pbkdf-iterations-to-cryptset.patch
+Patch0008:            0008-tang-dump-url-on-error-communication.patch
+Patch0009:            0009-feat-rename-the-test-pin-to-null-pin.patch
+Patch0010:            0010-avoid-clevis-invalid-msg.patch
+Patch0011:            0011-Improve-boot-performance-by-removing-key-check.patch
+Patch0012:            0012-ignore-empty-and-comment-lines-in-crypttab.patch
+Patch0013:            0013-luks-define-max-entropy-bits-for-pwmake.patch
+Patch0014:            0014-luks-edit-remove-unnecessary-redirection.patch
+Patch15:              0050-pwmake-entropy-workaround.patch
 
-BuildRequires:  git
-BuildRequires:  gcc
-BuildRequires:  meson
-BuildRequires:  asciidoc
-BuildRequires:  ninja-build
-BuildRequires:  bash-completion
+BuildRequires:        git
+BuildRequires:        gcc
+BuildRequires:        meson
+BuildRequires:        asciidoc
+BuildRequires:        ninja-build
+BuildRequires:        bash-completion
 
-BuildRequires:  libjose-devel >= 8
-BuildRequires:  libluksmeta-devel >= 8
-BuildRequires:  audit-libs-devel
-BuildRequires:  libudisks2-devel
-BuildRequires:  openssl-devel
+BuildRequires:        libjose-devel >= 8
+BuildRequires:        libluksmeta-devel >= 8
+BuildRequires:        audit-libs-devel
+BuildRequires:        libudisks2-devel
+BuildRequires:        openssl-devel
 
-BuildRequires:  tpm2-tools >= 3.0.0
-BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig
-BuildRequires:  systemd
-BuildRequires:  dracut
-BuildRequires:  tang >= 6
-BuildRequires:  curl
-BuildRequires:  luksmeta
-BuildRequires:  cracklib-dicts
-BuildRequires:  jq
-BuildRequires:  diffutils
-BuildRequires:  expect
-BuildRequires:  openssl
+BuildRequires:        tpm2-tools >= 3.0.0
+BuildRequires:        desktop-file-utils
+BuildRequires:        pkgconfig
+BuildRequires:        systemd
+BuildRequires:        dracut
+BuildRequires:        tang >= 6
+BuildRequires:        curl
+BuildRequires:        luksmeta
+BuildRequires:        cracklib-dicts
+BuildRequires:        jq
+BuildRequires:        diffutils
+BuildRequires:        expect
+BuildRequires:        openssl
 
-Requires:       cracklib-dicts
-Requires:       tpm2-tools >= 3.0.0
-Requires:       coreutils
-Requires:       jose >= 8
-Requires:       curl
-Requires:       jq
+Requires:             cracklib-dicts
+Requires:             tpm2-tools >= 3.0.0
+Requires:             coreutils
+Requires:             jose >= 8
+Requires:             curl
+Requires:             jq
 Requires(pre):  shadow-utils
 Requires(post): systemd
 
@@ -72,10 +73,10 @@ and clevis-dracut packages for automatic root volume unlocking of LUKS
 volumes during early boot.
 
 %package luks
-Summary:        LUKS integration for clevis
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       cryptsetup
-Requires:       luksmeta >= 8
+Summary:              LUKS integration for clevis
+Requires:             %{name}%{?_isa} = %{version}-%{release}
+Requires:             cryptsetup
+Requires:             luksmeta >= 8
 
 %description luks
 LUKS integration for clevis. This package allows you to bind a LUKS
@@ -83,18 +84,18 @@ volume to a clevis unlocking policy. For automated unlocking, an unlocker
 will also be required. See, for example, clevis-dracut and clevis-udisks2.
 
 %package systemd
-Summary:        systemd integration for clevis
-Requires:       %{name}-luks%{?_isa} = %{version}-%{release}
+Summary:              systemd integration for clevis
+Requires:             %{name}-luks%{?_isa} = %{version}-%{release}
 %if 0%{?fedora} > 27
-Requires:       systemd%{?_isa} >= 235-3
+Requires:             systemd%{?_isa} >= 235-3
 %else
 %if 0%{?fedora} == 27
-Requires:       systemd%{?_isa} >= 234-9
+Requires:             systemd%{?_isa} >= 234-9
 %else
 %if 0%{?fedora} == 26
-Requires:       systemd%{?_isa} >= 233-7
+Requires:             systemd%{?_isa} >= 233-7
 %else
-Requires:       systemd%{?_isa} >= 236
+Requires:             systemd%{?_isa} >= 236
 %endif
 %endif
 %endif
@@ -103,16 +104,16 @@ Requires:       systemd%{?_isa} >= 236
 Automatically unlocks clevis-bound LUKS block devices during boot.
 
 %package dracut
-Summary:        Dracut integration for clevis
-Requires:       %{name}-systemd%{?_isa} = %{version}-%{release}
-Requires:       dracut-network
+Summary:              Dracut integration for clevis
+Requires:             %{name}-systemd%{?_isa} = %{version}-%{release}
+Requires:             dracut-network
 
 %description dracut
 Automatically unlocks LUKS block devices in early boot.
 
 %package udisks2
-Summary:        UDisks2/Storaged integration for clevis
-Requires:       %{name}-luks%{?_isa} = %{version}-%{release}
+Summary:              UDisks2/Storaged integration for clevis
+Requires:             %{name}-luks%{?_isa} = %{version}-%{release}
 
 %description udisks2
 Automatically unlocks LUKS block devices in desktop environments that
@@ -203,6 +204,9 @@ systemctl preset %{name}-luks-askpass.path >/dev/null 2>&1 || :
 %attr(4755, root, root) %{_libexecdir}/%{name}-luks-udisks2
 
 %changelog
+* Thu Jan 23 2025 Skip Grube <sgrube@ciq.com> - 15-14.0.1
+- Workaround for systems with high entropy demands: trigger several pwmake attempts and collect a successful one.
+
 * Mon Jan 16 2023 Sergio Arroutbi <sarroutb@redhat.com> - 15-14
 - luks-edit: remove unnecessary 2>/dev/null
   Resolves: rhbz#2159739
